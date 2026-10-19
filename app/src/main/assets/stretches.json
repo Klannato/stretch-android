@@ -1,0 +1,674 @@
+{
+  "version": 1,
+  "note": "Angle convention: degrees, screen space, 0=right, 90=down, 180=left, 270=up. Each pose is a set of limb directions; the renderer does forward kinematics from the hip.",
+  "stretches": [
+    {
+      "id": "side-bend",
+      "name": "Overhead side bend",
+      "cue": "Feet hip-width, both arms overhead. Hold your wrist and lean to one side, keeping the hips still.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 270,
+          "head": 272,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            277,
+            285
+          ],
+          "armR": [
+            263,
+            255
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 288,
+          "head": 300,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            297,
+            307
+          ],
+          "armR": [
+            287,
+            276
+          ],
+          "legL": [
+            84,
+            88
+          ],
+          "legR": [
+            96,
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neck-side",
+      "name": "Neck side release",
+      "cue": "Drop one ear toward the shoulder and rest that hand lightly on your head. Keep the other shoulder down.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 270,
+          "head": 288,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            96,
+            100
+          ],
+          "armR": [
+            255,
+            330
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 272,
+          "head": 302,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            94,
+            98
+          ],
+          "armR": [
+            250,
+            340
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shoulder-cross",
+      "name": "Cross-body shoulder",
+      "cue": "Draw one arm straight across your chest. Hook your other forearm under the elbow and pull gently.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 272,
+          "head": 272,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            15,
+            170
+          ],
+          "armR": [
+            168,
+            195
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 274,
+          "head": 274,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            8,
+            178
+          ],
+          "armR": [
+            172,
+            200
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chest-open",
+      "name": "Chest opener",
+      "cue": "Clasp your hands behind your back, straighten the arms and lift the chest. Keep the ribs from flaring.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "one",
+      "poses": [
+        {
+          "torso": 272,
+          "head": 268,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            140,
+            155
+          ],
+          "armR": [
+            40,
+            25
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 266,
+          "head": 262,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            150,
+            168
+          ],
+          "armR": [
+            30,
+            12
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triceps",
+      "name": "Overhead triceps",
+      "cue": "Take one arm overhead and let the hand drop behind your head. The other hand presses the elbow back.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 270,
+          "head": 270,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            270,
+            300
+          ],
+          "armR": [
+            282,
+            205
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 272,
+          "head": 272,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            268,
+            295
+          ],
+          "armR": [
+            285,
+            195
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        }
+      ]
+    },
+    {
+      "id": "side-lunge",
+      "name": "Side lunge",
+      "cue": "Feet wide, toes forward. Bend one knee and sit back into it while the other leg stays long.",
+      "tags": [
+        "am"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 278,
+          "head": 278,
+          "hipX": 0,
+          "hipY": -6,
+          "armL": [
+            182,
+            190
+          ],
+          "armR": [
+            2,
+            12
+          ],
+          "legL": [
+            112,
+            112
+          ],
+          "legR": [
+            70,
+            92
+          ]
+        },
+        {
+          "torso": 292,
+          "head": 296,
+          "hipX": 0,
+          "hipY": -12,
+          "armL": [
+            186,
+            195
+          ],
+          "armR": [
+            8,
+            20
+          ],
+          "legL": [
+            118,
+            118
+          ],
+          "legR": [
+            66,
+            90
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hip-flexor",
+      "name": "Standing hip flexor",
+      "cue": "Split stance, back heel lifted. Tuck the pelvis under and press the back hip forward.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 270,
+          "head": 270,
+          "hipX": 0,
+          "hipY": -4,
+          "armL": [
+            96,
+            100
+          ],
+          "armR": [
+            84,
+            80
+          ],
+          "legL": [
+            80,
+            88
+          ],
+          "legR": [
+            118,
+            100
+          ]
+        },
+        {
+          "torso": 272,
+          "head": 272,
+          "hipX": 0,
+          "hipY": -9,
+          "armL": [
+            94,
+            98
+          ],
+          "armR": [
+            86,
+            82
+          ],
+          "legL": [
+            76,
+            90
+          ],
+          "legR": [
+            126,
+            104
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quad",
+      "name": "Standing quad",
+      "cue": "Stand tall on one leg and draw the other ankle up behind you. Knees close, hips level.",
+      "tags": [
+        "am"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 272,
+          "head": 272,
+          "hipX": 0,
+          "hipY": -2,
+          "armL": [
+            98,
+            104
+          ],
+          "armR": [
+            99,
+            108
+          ],
+          "legL": [
+            90,
+            90
+          ],
+          "legR": [
+            73,
+            250
+          ]
+        },
+        {
+          "torso": 274,
+          "head": 274,
+          "hipX": 0,
+          "hipY": -2,
+          "armL": [
+            96,
+            102
+          ],
+          "armR": [
+            98,
+            110
+          ],
+          "legL": [
+            90,
+            90
+          ],
+          "legR": [
+            70,
+            242
+          ]
+        }
+      ]
+    },
+    {
+      "id": "calf",
+      "name": "Calf press",
+      "cue": "Hands on a wall. Step one foot back, keep that leg straight and press the heel into the floor.",
+      "tags": [
+        "am",
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 276,
+          "head": 274,
+          "hipX": 0,
+          "hipY": -2,
+          "armL": [
+            2,
+            4
+          ],
+          "armR": [
+            358,
+            0
+          ],
+          "legL": [
+            84,
+            88
+          ],
+          "legR": [
+            110,
+            112
+          ]
+        },
+        {
+          "torso": 282,
+          "head": 280,
+          "hipX": 0,
+          "hipY": -3,
+          "armL": [
+            4,
+            8
+          ],
+          "armR": [
+            356,
+            0
+          ],
+          "legL": [
+            82,
+            86
+          ],
+          "legR": [
+            118,
+            122
+          ]
+        }
+      ],
+      "props": "wall"
+    },
+    {
+      "id": "fig-four",
+      "name": "Standing figure-four",
+      "cue": "Cross one ankle over the opposite thigh and sit back into an invisible chair. Hinge forward slightly.",
+      "tags": [
+        "pm"
+      ],
+      "sides": "two",
+      "poses": [
+        {
+          "torso": 284,
+          "head": 284,
+          "hipX": 0,
+          "hipY": -8,
+          "armL": [
+            140,
+            120
+          ],
+          "armR": [
+            55,
+            80
+          ],
+          "legL": [
+            88,
+            90
+          ],
+          "legR": [
+            20,
+            130
+          ]
+        },
+        {
+          "torso": 296,
+          "head": 296,
+          "hipX": 0,
+          "hipY": -14,
+          "armL": [
+            136,
+            118
+          ],
+          "armR": [
+            50,
+            84
+          ],
+          "legL": [
+            88,
+            90
+          ],
+          "legR": [
+            16,
+            136
+          ]
+        }
+      ]
+    },
+    {
+      "id": "twist",
+      "name": "Standing twist",
+      "cue": "Arms out wide. Rotate the ribcage to one side and let the arms swing with it, then the other.",
+      "tags": [
+        "am"
+      ],
+      "sides": "one",
+      "poses": [
+        {
+          "torso": 268,
+          "head": 268,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            178,
+            178
+          ],
+          "armR": [
+            2,
+            2
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 262,
+          "head": 262,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            150,
+            158
+          ],
+          "armR": [
+            30,
+            22
+          ],
+          "legL": [
+            86,
+            90
+          ],
+          "legR": [
+            94,
+            90
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise reach",
+      "cue": "Reach tall through the fingertips and rise onto the balls of your feet, then lower slowly.",
+      "tags": [
+        "am"
+      ],
+      "sides": "one",
+      "poses": [
+        {
+          "torso": 270,
+          "head": 268,
+          "hipX": 0,
+          "hipY": 0,
+          "armL": [
+            266,
+            270
+          ],
+          "armR": [
+            274,
+            278
+          ],
+          "legL": [
+            88,
+            92
+          ],
+          "legR": [
+            92,
+            88
+          ]
+        },
+        {
+          "torso": 268,
+          "head": 264,
+          "hipX": 0,
+          "hipY": -5,
+          "armL": [
+            260,
+            264
+          ],
+          "armR": [
+            280,
+            284
+          ],
+          "legL": [
+            92,
+            88
+          ],
+          "legR": [
+            88,
+            92
+          ]
+        }
+      ]
+    }
+  ]
+}

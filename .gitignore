@@ -1,0 +1,10 @@
+# Secrets and machine-local paths
+keystore/
+local.properties
+
+# Gradle / Android
+build/
+.gradle/
+*.iml
+.idea/
+.DS_Store
