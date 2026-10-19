@@ -6,6 +6,18 @@ bed. Sessions are **five minutes** (5 × 60 seconds), all **standing**, and they
 
 Each stretch is drawn as an **animated vector stick figure** — no images, no network.
 
+## Download
+
+**https://github.com/Klannato/stretch-android/releases/download/v1.0/app-release.apk**
+
+Open that link in your phone's browser and tap **Install** when the download
+finishes. Android flags it as an unknown app: choose **Install anyway** and allow
+it from that app. The warning is expected — it's signed with a local key, not a Play
+Store key.
+
+If you'd rather build from source, or install over USB, see the [Install](#install)
+section below.
+
 ## Install
 
 Option A — straight to your phone over USB (the APK is already built):
