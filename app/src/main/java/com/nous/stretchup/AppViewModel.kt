@@ -40,6 +40,17 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var sessionsDone by mutableStateOf(prefs.sessionsDone)
         private set
 
+    /**
+     * Bumped when imported footage changes. The session screen keys on it so a clip
+     * imported while a session is paused is picked up on the next block.
+     */
+    var videosVersion by mutableStateOf(0)
+        private set
+
+    fun videosChanged() {
+        videosVersion += 1
+    }
+
     // Session state
     var plan by mutableStateOf<List<Block>>(emptyList())
         private set

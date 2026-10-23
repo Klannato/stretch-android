@@ -90,6 +90,21 @@ The only outbound interactions are **intents to Android's own settings screens**
 only in response to a tap (opening this app's notification settings, or the exact-alarm
 settings page).
 
+## Imported video
+
+If you import your own footage, the app stores a `content://` URI for each clip in the
+same private preferences file, plus a persisted read grant from Android's document
+picker. That means:
+
+- the app can read **only the files you picked**, and only for as long as you leave the
+  grant in place;
+- your video is **never copied** into the app's storage, and never uploaded — there is
+  still no network permission;
+- removing a clip in the app, or deleting the original file, ends the app's access.
+
+Nothing about a clip is analysed: no frame extraction, no pose detection, no metadata
+reading beyond the display name used to match it to a stretch.
+
 ## Notifications
 
 Reminders are posted by the app itself through `AlarmManager`, with content generated

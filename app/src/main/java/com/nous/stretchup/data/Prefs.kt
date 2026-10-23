@@ -45,6 +45,16 @@ class Prefs(context: Context) {
         get() = sp.getBoolean(KEY_ASKED_NOTIF, false)
         set(value) { sp.edit().putBoolean(KEY_ASKED_NOTIF, value).apply() }
 
+    /** JSON object of stretch id -> array of imported video URIs. See VideoLibrary. */
+    var videoIndex: String
+        get() = sp.getString(KEY_VIDEO_INDEX, "") ?: ""
+        set(value) { sp.edit().putString(KEY_VIDEO_INDEX, value).apply() }
+
+    /** JSON array of imported files still waiting to be assigned to a stretch. */
+    var pendingVideos: String
+        get() = sp.getString(KEY_PENDING_VIDEOS, "") ?: ""
+        set(value) { sp.edit().putString(KEY_PENDING_VIDEOS, value).apply() }
+
     companion object {
         private const val KEY_WAKE = "wake_minutes"
         private const val KEY_BED = "bed_minutes"
@@ -53,5 +63,7 @@ class Prefs(context: Context) {
         private const val KEY_CURSOR = "cursor"
         private const val KEY_DONE = "sessions_done"
         private const val KEY_ASKED_NOTIF = "asked_notifications"
+        private const val KEY_VIDEO_INDEX = "video_index"
+        private const val KEY_PENDING_VIDEOS = "pending_videos"
     }
 }

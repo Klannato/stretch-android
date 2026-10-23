@@ -229,6 +229,10 @@ fun HomeScreen(
             }
         }
 
+        Spacer(Modifier.height(16.dp))
+
+        VideoImportCard(vm = vm, onChanged = { vm.videosChanged() })
+
         if (!notificationsEnabled) {
             Spacer(Modifier.height(14.dp))
             NoticeCard(

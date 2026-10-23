@@ -32,20 +32,24 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nous.stretchup.AppViewModel
+import com.nous.stretchup.data.VideoLibrary
+import com.nous.stretchup.model.Stretch
 import com.nous.stretchup.model.poseAt
-import androidx.compose.ui.platform.LocalContext
+import com.nous.stretchup.session.Block
 import com.nous.stretchup.session.SessionPlanner
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 
 /**
  * The session screen: one stretch per 60-second block, with the figure, the cue, the
@@ -53,6 +57,10 @@ import kotlin.math.roundToInt
  *
  * The clock is driven here rather than in the ViewModel because it has to stop when
  * the screen leaves composition; the ViewModel only owns the elapsed value.
+ *
+ * What plays in the card depends on what exists for the stretch, in this order:
+ * imported footage (the user's own recording), then the drawn figure with the
+ * generated illustration beside it.
  */
 @Composable
 fun SessionScreen(vm: AppViewModel) {
@@ -61,6 +69,7 @@ fun SessionScreen(vm: AppViewModel) {
     val block = vm.plan.getOrNull(blockIndex) ?: return
     val into = SessionPlanner.secondsIntoBlock(vm.elapsed)
     val cs = MaterialTheme.colorScheme
+    val context = LocalContext.current
 
     // One timer drives the session clock; 100 ms is smooth enough for a countdown.
     LaunchedEffect(vm.running) {
@@ -106,6 +115,15 @@ fun SessionScreen(vm: AppViewModel) {
     val blockRemaining = ceil(SessionPlanner.BLOCK_SECONDS - into).toInt().coerceIn(0, SessionPlanner.BLOCK_SECONDS)
     val totalRemaining = ceil(SessionPlanner.TOTAL_SECONDS - vm.elapsed).toInt().coerceAtLeast(0)
 
+    // Imported footage wins over the drawings. Re-read per block, and re-read again if
+    // the import screen changed something mid-session.
+    val videoLibrary = remember { VideoLibrary(context) }
+    val videos = remember(block.stretch.id, vm.videosVersion) {
+        videoLibrary.videosFor(block.stretch.id)
+    }
+    var videoBroken by remember(block.stretch.id) { mutableStateOf(false) }
+    val showVideo = videos.isNotEmpty() && !videoBroken
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -138,10 +156,6 @@ fun SessionScreen(vm: AppViewModel) {
 
         Spacer(Modifier.height(10.dp))
 
-        val context = LocalContext.current
-        val available = remember { context.assets.list("ref")?.toSet() ?: emptySet() }
-        val hasReference = "${block.stretch.id}.gif" in available || "${block.stretch.id}.webp" in available
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,68 +163,46 @@ fun SessionScreen(vm: AppViewModel) {
                 .clip(RoundedCornerShape(26.dp))
                 .background(cs.surface)
         ) {
-            Row(Modifier.fillMaxSize()) {
-                StickFigure(
+            if (showVideo) {
+                ImportedVideo(
+                    uris = videos,
+                    onUnplayable = { videoBroken = true },
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                FigurePanel(
+                    block = block,
                     pose = pose,
                     bounds = bounds,
-                    mirrored = mirrored,
-                    showWall = block.stretch.props == "wall",
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .padding(10.dp)
+                    mirrored = mirrored
                 )
-                if (hasReference) {
-                    Column(
+
+                if (switching) {
+                    Box(
                         modifier = Modifier
-                            .width(126.dp)
-                            .align(Alignment.Top)
-                            .padding(top = 10.dp, end = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .align(Alignment.Center)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(cs.primary)
+                            .padding(horizontal = 18.dp, vertical = 10.dp)
                     ) {
-                        ReferenceLoop(
-                            stretchId = block.stretch.id,
-                            contentDescription = "Reference animation for ${block.stretch.name}",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(0.75f)
-                                .clip(RoundedCornerShape(12.dp))
-                        )
                         Text(
-                            "reference",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = cs.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 2.dp)
+                            "Switch sides",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = cs.onPrimary
                         )
                     }
                 }
-            }
 
-            if (switching) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(cs.primary)
-                        .padding(horizontal = 18.dp, vertical = 10.dp)
-                ) {
+                if (block.twoSided) {
                     Text(
-                        "Switch sides",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = cs.onPrimary
+                        if (mirrored) "Second side" else "First side",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = cs.onSurfaceVariant,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(14.dp)
                     )
                 }
-            }
-
-            if (block.twoSided) {
-                Text(
-                    if (mirrored) "Second side" else "First side",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = cs.onSurfaceVariant,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(14.dp)
-                )
             }
         }
 
@@ -285,6 +277,60 @@ fun SessionScreen(vm: AppViewModel) {
                 modifier = Modifier.height(52.dp)
             ) {
                 Text("Next", style = MaterialTheme.typography.labelLarge, color = cs.onBackground)
+            }
+        }
+    }
+}
+
+/**
+ * The drawn fallback: the animated figure with the generated illustration pinned to the
+ * top-right corner. Used whenever a stretch has no imported footage.
+ */
+@Composable
+private fun FigurePanel(
+    block: Block,
+    pose: com.nous.stretchup.model.Pose,
+    bounds: FigureBounds,
+    mirrored: Boolean
+) {
+    val cs = MaterialTheme.colorScheme
+    val context = LocalContext.current
+    val available = remember { context.assets.list("ref")?.toSet() ?: emptySet() }
+    val hasReference = "${block.stretch.id}.webp" in available || "${block.stretch.id}.gif" in available
+
+    Row(Modifier.fillMaxSize()) {
+        StickFigure(
+            pose = pose,
+            bounds = bounds,
+            mirrored = mirrored,
+            showWall = block.stretch.props == "wall",
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .padding(10.dp)
+        )
+        if (hasReference) {
+            Column(
+                modifier = Modifier
+                    .width(126.dp)
+                    .align(Alignment.Top)
+                    .padding(top = 10.dp, end = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ReferenceLoop(
+                    stretchId = block.stretch.id,
+                    contentDescription = "Reference animation for ${block.stretch.name}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(0.75f)
+                        .clip(RoundedCornerShape(12.dp))
+                )
+                Text(
+                    "reference",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = cs.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
             }
         }
     }

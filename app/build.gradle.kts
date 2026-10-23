@@ -13,8 +13,8 @@ android {
         applicationId = "com.nous.stretchup"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
     }
 
     signingConfigs {
@@ -72,6 +72,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    // Video playback for imported footage. ExoPlayer handles whatever codec the phone
+    // recorded; MediaPlayer/VideoView is more brittle across devices and containers.
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-ui:1.4.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
     // real JSON impl so unit tests can read the asset file (android.jar stubs throw)

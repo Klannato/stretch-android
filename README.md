@@ -44,6 +44,7 @@ works.
 | Tap the notification | Opens the app straight into the five-minute session for that time of day |
 | Session | 5 blocks × 60s. One stretch per block, animated figure, countdown, pause, skip, back |
 | Reference loop | A short low-framerate illustration of the same stretch plays beside the figure, so the pose is unambiguous |
+| Your own footage | Import clips of a real person; the session plays them instead of the drawings. Several angles per stretch, tap to switch |
 | Two-sided stretches | 30 seconds per side, with a "Switch sides" cue in the middle |
 | Rotation | A pointer advances by 5 each session. Morning and evening draw from separate pools |
 | After a session | A recap list and a running session count on the home screen |
@@ -114,6 +115,32 @@ The skeleton has a bend point in the spine, so fields are:
 
 `PoseGeometryTest` reads this file and asserts the invariants (both feet never cross
 at once, hands stay off the floor), which is what caught a pair of swapped legs.
+
+## Recording your own footage
+
+The app can play real footage instead of the drawings. In **Your own footage** on the
+home screen, tap **Import videos** and pick clips. How they are matched:
+
+| filename | goes to |
+|---|---|
+| `side-bend.mp4` | that stretch, automatically |
+| `side-bend_2.mp4`, `side-bend-angle1.mov` | same stretch, as a second angle |
+| `VID_20261023.mp4` | a queue on the home screen where you choose the stretch by hand |
+
+Once a stretch has footage, the session card plays it (silent, looping, cropped to
+fill) instead of the figure and the illustration. With more than one angle the label
+in the corner cycles them on tap. Remove a clip with **Remove** next to its stretch.
+
+Notes:
+
+- The app stores only a `content://` reference — your video is **not copied** into the
+  app, so it stays wherever you filed it. Deleting or moving the original breaks the
+  link, and the app falls back to the drawn figure rather than showing a black box.
+- Access is persisted across reboots via a persisted URI grant.
+- `docs/guide/*.mp4` are **filming guides**, not footage: a 6-second loop of the
+  pose from the pose data, with the cue and the angles to shoot. They live outside the
+  app on purpose, so they don't inflate the APK. Regenerate with
+  `python3 tools/render_reference_videos.py`.
 
 ## Reference illustrations
 
