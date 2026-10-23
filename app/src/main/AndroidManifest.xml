@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
+  Stretch — an offline stretching reminder.
+
+  Privacy posture: there is deliberately no android.permission.INTERNET, so this
+  process cannot open a socket even by accident. Everything it stores (wake/bed
+  times, rotation cursor, session count) stays in this app's private
+  SharedPreferences. See PRIVACY.md for the full audit.
+
+  Every permission below is load-bearing:
+    POST_NOTIFICATIONS  — to show the reminder (runtime prompt on Android 13+)
+    RECEIVE_BOOT_COMPLETED — AlarmManager forgets alarms across a reboot
+    SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM — the reminder must fire at the time set
+    VIBRATE             — the session signals block changes
+    WAKE_LOCK           — the alarm fires while the device is dozing
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -9,12 +25,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Stretch"
         android:supportsRtl="true"
         android:theme="@style/Theme.Stretch">
 
+        <!-- The launcher entry point: exported because the system must be able to start it. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -26,10 +44,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Fires the reminder. Explicitly targetable by our own alarms only. -->
         <receiver
             android:name=".ReminderReceiver"
             android:exported="false" />
 
+        <!-- Re-arms alarms after a reboot or an app update. -->
         <receiver
             android:name=".BootReceiver"
             android:exported="false">
@@ -39,5 +59,14 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!--
+          Comes in from androidx.profileinstaller. It is gated behind android.permission.DUMP
+          (signature|privileged), so a normal app cannot reach it, but a sideloaded app has no
+          use for baseline-profile installation at all - drop it rather than ship the surface.
+        -->
+        <receiver
+            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+            tools:node="remove" />
     </application>
 </manifest>

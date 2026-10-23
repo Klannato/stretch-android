@@ -13,6 +13,13 @@ import com.nous.stretchup.data.Prefs
 import com.nous.stretchup.session.Slot
 import java.util.Calendar
 
+/**
+ * Everything to do with the two daily nudges: scheduling them with AlarmManager,
+ * building the notification, and keeping the alarm alive across reboots.
+ *
+ * One alarm per slot, each rescheduled by [scheduleDaily] after it fires. No network
+ * access is involved at any point — the notification is entirely local.
+ */
 object Reminders {
 
     const val CHANNEL_ID = "stretch_reminders"
@@ -44,6 +51,11 @@ object Reminders {
     const val REMIND = "com.nous.stretchup.REMIND"
     const val SNOOZE = "com.nous.stretchup.SNOOZE"
 
+    /**
+     * Android 12+ can withhold exact alarms. When it has, every schedule call silently
+     * degrades to an inexact window, so the home screen surfaces this to offer the
+     * settings page rather than letting nudges arrive late with no explanation.
+     */
     fun canScheduleExact(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true
         val am = context.getSystemService(AlarmManager::class.java) ?: return false
@@ -83,6 +95,10 @@ object Reminders {
         }
     }
 
+    /**
+     * The next time-of-day occurrence, as an epoch millis. Always in the future: if the
+     * time has already passed today, this returns tomorrow's.
+     */
     fun nextOccurrence(minutesOfDay: Int): Long {
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {
@@ -159,11 +175,11 @@ object Reminders {
             .build()
 
         runCatching {
-            val enabled = NotificationManagerCompat.from(context).areNotificationsEnabled()
-            android.util.Log.i("Stretch", "posting notification slot=$slot enabled=$enabled")
-            if (enabled) {
+            // Silently no-op when the user has switched notifications off: posting would
+            // throw on Android 13+, and the reminder is not worth a crash.
+            if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
                 NotificationManagerCompat.from(context).notify(requestCode(slot), n)
             }
-        }.onFailure { android.util.Log.e("Stretch", "notify failed", it) }
+        }
     }
 }

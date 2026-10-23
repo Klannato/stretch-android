@@ -34,6 +34,7 @@ import com.nous.stretchup.session.SessionPlanner
 import com.nous.stretchup.session.Slot
 import java.util.Calendar
 
+/** Formats minutes-from-midnight as a 12-hour clock string, e.g. 450 -> "7:30 am". */
 fun formatClock(minutesOfDay: Int): String {
     val h24 = minutesOfDay / 60
     val m = minutesOfDay % 60
@@ -45,12 +46,14 @@ fun formatClock(minutesOfDay: Int): String {
     return "$h:${m.toString().padStart(2, '0')} $suffix"
 }
 
+/** Formats a countdown as m:ss. */
 fun formatSeconds(total: Int): String {
     val m = total / 60
     val s = total % 60
     return "$m:${s.toString().padStart(2, '0')}"
 }
 
+/** Time-of-day word for the subtitle; purely cosmetic. */
 private fun greeting(): String {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     return when {
@@ -60,11 +63,20 @@ private fun greeting(): String {
     }
 }
 
+/**
+ * Which of the two sets the big button starts. Morning before 3pm, evening after, so
+ * opening the app at the right time of day does not need a choice.
+ */
 private fun primarySlot(): Slot {
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     return if (hour < 15) Slot.WAKE else Slot.BED
 }
 
+/**
+ * The home screen: today's five stretches, the start button, and the two reminder
+ * rows. Nothing here touches the network — the only outbound interaction the app has
+ * is handing an intent to the system settings pages, and only when the user taps.
+ */
 @Composable
 fun HomeScreen(
     vm: AppViewModel,
@@ -256,6 +268,7 @@ fun HomeScreen(
     }
 }
 
+/** One reminder: its label, its time (tap to change), and an on/off switch. */
 @Composable
 private fun ReminderRow(
     label: String,
@@ -294,6 +307,7 @@ private fun ReminderRow(
     }
 }
 
+/** A quiet inline notice with a single action, used for permission problems. */
 @Composable
 private fun NoticeCard(
     title: String,

@@ -38,6 +38,11 @@ import com.nous.stretchup.ui.HomeScreen
 import com.nous.stretchup.ui.SessionScreen
 import com.nous.stretchup.ui.StretchTheme
 
+/**
+ * The single activity. It also owns the "open straight into a session" path: tapping
+ * a reminder (or its Start action) delivers an intent with [Reminders.EXTRA_AUTOSTART],
+ * which is turned into a state read by Compose rather than into a re-launch.
+ */
 class MainActivity : ComponentActivity() {
 
     private var pendingSlot by mutableStateOf<Slot?>(null)
@@ -56,6 +61,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /** singleTop: the activity is reused, so the new intent arrives here instead of onCreate. */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         slotFrom(intent)?.let { pendingSlot = it }
@@ -69,6 +75,11 @@ class MainActivity : ComponentActivity() {
         }
 }
 
+/**
+ * Routes between the home screen and a running session, and owns the two permission
+ * conversations the app needs: the runtime notification prompt (Android 13+, asked
+ * once) and the exact-alarm capability (surfaced on the home screen, not prompted).
+ */
 @Composable
 private fun AppRoot(vm: AppViewModel, pendingSlot: Slot?, onSlotConsumed: () -> Unit) {
     val context = LocalContext.current
@@ -79,6 +90,8 @@ private fun AppRoot(vm: AppViewModel, pendingSlot: Slot?, onSlotConsumed: () -> 
     }
     var exactAlarmsOk by remember { mutableStateOf(Reminders.canScheduleExact(context)) }
 
+    // Both permission states can be changed outside the app, so re-read them on resume
+    // rather than trusting the values captured at first composition.
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -95,6 +108,7 @@ private fun AppRoot(vm: AppViewModel, pendingSlot: Slot?, onSlotConsumed: () -> 
         ActivityResultContracts.RequestPermission()
     ) { granted -> notificationsEnabled = granted }
 
+    // Ask for notification permission exactly once, on first launch.
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !prefs.askedNotifications) {
             prefs.askedNotifications = true
@@ -105,6 +119,8 @@ private fun AppRoot(vm: AppViewModel, pendingSlot: Slot?, onSlotConsumed: () -> 
         }
     }
 
+    // A reminder was tapped: jump into the session for that slot, then clear the flag so
+    // a recomposition does not restart it.
     LaunchedEffect(pendingSlot) {
         pendingSlot?.let {
             vm.startSession(it)

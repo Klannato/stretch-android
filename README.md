@@ -48,7 +48,10 @@ works.
 | Rotation | A pointer advances by 5 each session. Morning and evening draw from separate pools |
 | After a session | A recap list and a running session count on the home screen |
 
-Everything works offline. No accounts, no analytics, no trackers.
+Everything works offline. No accounts, no analytics, no trackers — the app does not
+even declare the `INTERNET` permission, so it is incapable of sending anything anywhere.
+See **[PRIVACY.md](PRIVACY.md)** for the full audit: what is stored, every permission
+and why, and how the shipped APK was checked.
 
 ## First-run permissions
 

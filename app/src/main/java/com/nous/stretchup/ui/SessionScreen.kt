@@ -47,6 +47,13 @@ import com.nous.stretchup.session.SessionPlanner
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
+/**
+ * The session screen: one stretch per 60-second block, with the figure, the cue, the
+ * countdown and the reference loop.
+ *
+ * The clock is driven here rather than in the ViewModel because it has to stop when
+ * the screen leaves composition; the ViewModel only owns the elapsed value.
+ */
 @Composable
 fun SessionScreen(vm: AppViewModel) {
     val haptics = LocalHapticFeedback.current
@@ -72,6 +79,8 @@ fun SessionScreen(vm: AppViewModel) {
         return
     }
 
+    // The breathing animation is a 7-second cosine cycle, so the pose eases in and out
+    // instead of snapping between keyframes. Frozen while paused so the figure holds.
     val cycle = if (vm.running) {
         val transition = rememberInfiniteTransition(label = "breath")
         val value by transition.animateFloat(
@@ -90,6 +99,8 @@ fun SessionScreen(vm: AppViewModel) {
 
     val pose = block.stretch.poseAt(cycle)
     val bounds = remember(block.stretch.id) { figureBounds(block.stretch) }
+    // Two-sided stretches play the same pose flipped for the second half, which is what
+    // makes "30 seconds a side" work without a second set of drawings.
     val mirrored = SessionPlanner.mirrorActive(block, into)
     val switching = SessionPlanner.switchingSide(block, into)
     val blockRemaining = ceil(SessionPlanner.BLOCK_SECONDS - into).toInt().coerceIn(0, SessionPlanner.BLOCK_SECONDS)
@@ -279,6 +290,7 @@ fun SessionScreen(vm: AppViewModel) {
     }
 }
 
+/** End-of-session recap: what was done, and the one button left to press. */
 @Composable
 private fun Summary(vm: AppViewModel) {
     val cs = MaterialTheme.colorScheme

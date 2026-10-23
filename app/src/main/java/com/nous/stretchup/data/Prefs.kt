@@ -2,7 +2,16 @@ package com.nous.stretchup.data
 
 import android.content.Context
 
-/** Small synchronous store: reminders must be readable from a BroadcastReceiver. */
+/**
+ * The app's only storage: a handful of integers and booleans in private
+ * SharedPreferences.
+ *
+ * Synchronous by design. A BroadcastReceiver has no lifecycle in which to collect a
+ * suspend Flow, and the values are tiny, so a blocking read is both sufficient and
+ * simpler than DataStore here. Nothing is written outside this app's private
+ * directory, and backup is disabled in the manifest so these values never leave the
+ * device.
+ */
 class Prefs(context: Context) {
 
     private val sp = context.applicationContext.getSharedPreferences("stretch", Context.MODE_PRIVATE)

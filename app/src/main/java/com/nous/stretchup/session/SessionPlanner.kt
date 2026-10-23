@@ -36,6 +36,7 @@ object SessionPlanner {
         return stretches.map { Block(it) } to next
     }
 
+    /** Which of the five blocks the clock is currently in. */
     fun blockIndexFor(elapsed: Float): Int =
         (elapsed / BLOCK_SECONDS).toInt().coerceIn(0, BLOCKS - 1)
 
@@ -45,6 +46,10 @@ object SessionPlanner {
     fun switchingSide(block: Block, secondsInto: Float): Boolean =
         block.twoSided && secondsInto in 28f..32f
 
+    /**
+     * True for the back half of a two-sided block. The UI renders the same pose
+     * mirrored, which is how one drawing serves both sides of a stretch.
+     */
     fun mirrorActive(block: Block, secondsInto: Float): Boolean =
         block.twoSided && secondsInto >= 30f
 }
