@@ -21,8 +21,12 @@ class SessionPlannerTest {
         twoSided = twoSided,
         props = null,
         poses = listOf(
-            Pose(270f, 270f, 0f, 0f, Limb(90f, 90f), Limb(90f, 90f), Limb(90f, 90f), Limb(90f, 90f)),
-            Pose(280f, 280f, 0f, 0f, Limb(80f, 80f), Limb(80f, 80f), Limb(90f, 90f), Limb(90f, 90f))
+            Pose(torso = 270f, spine = 270f, head = 270f, hipX = 0f, hipY = 0f,
+                armL = Limb(90f, 90f), armR = Limb(90f, 90f),
+                legL = Limb(90f, 90f), legR = Limb(90f, 90f)),
+            Pose(torso = 280f, spine = 280f, head = 280f, hipX = 0f, hipY = 0f,
+                armL = Limb(80f, 80f), armR = Limb(80f, 80f),
+                legL = Limb(90f, 90f), legR = Limb(90f, 90f))
         )
     )
 
@@ -122,8 +126,10 @@ class SessionPlannerTest {
 
     @Test
     fun `pose interpolation travels the short way round the circle`() {
-        val a = Pose(350f, 0f, 0f, 0f, Limb(10f, 0f), Limb(0f, 0f), Limb(0f, 0f), Limb(0f, 0f))
-        val b = Pose(10f, 0f, 0f, 0f, Limb(350f, 0f), Limb(0f, 0f), Limb(0f, 0f), Limb(0f, 0f))
+        val a = Pose(torso = 350f, spine = 350f, head = 0f, hipX = 0f, hipY = 0f,
+            armL = Limb(10f, 0f), armR = Limb(0f, 0f), legL = Limb(0f, 0f), legR = Limb(0f, 0f))
+        val b = Pose(torso = 10f, spine = 10f, head = 0f, hipX = 0f, hipY = 0f,
+            armL = Limb(350f, 0f), armR = Limb(0f, 0f), legL = Limb(0f, 0f), legR = Limb(0f, 0f))
         val mid = lerpPose(a, b, 0.5f)
         // 360 and 0 are the same direction; compare modulo a full turn
         assertEquals(0f, mid.torso % 360f, 0.01f)

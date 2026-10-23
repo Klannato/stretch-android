@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "note": "Angle convention: degrees, screen space, 0=right, 90=down, 180=left, 270=up. Each pose is a set of limb directions; the renderer does forward kinematics from the hip.",
+  "version": 2,
+  "note": "Angle convention: degrees, screen space, 0=right, 90=down, 180=left, 270=up. torso is hip->lumbar and spine is lumbar->neck, so the waist is a real bend point. pelvisAngle/chestAngle default to torso/spine; giving them different values is how a twist reads.",
   "stretches": [
     {
       "id": "side-bend",
@@ -14,9 +14,10 @@
       "poses": [
         {
           "torso": 270,
+          "spine": 270,
           "head": 272,
-          "hipX": 0,
-          "hipY": 0,
+          "pelvis": 10,
+          "shoulders": 10,
           "armL": [
             277,
             285
@@ -35,10 +36,11 @@
           ]
         },
         {
-          "torso": 288,
+          "torso": 270,
+          "spine": 288,
           "head": 300,
-          "hipX": 0,
-          "hipY": 0,
+          "pelvis": 10,
+          "shoulders": 10,
           "armL": [
             297,
             307
@@ -70,9 +72,8 @@
       "poses": [
         {
           "torso": 270,
+          "spine": 272,
           "head": 288,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             96,
             100
@@ -91,10 +92,9 @@
           ]
         },
         {
-          "torso": 272,
+          "torso": 270,
+          "spine": 274,
           "head": 302,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             94,
             98
@@ -126,9 +126,8 @@
       "poses": [
         {
           "torso": 272,
+          "spine": 272,
           "head": 272,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             15,
             170
@@ -147,10 +146,9 @@
           ]
         },
         {
-          "torso": 274,
+          "torso": 272,
+          "spine": 274,
           "head": 274,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             8,
             178
@@ -182,9 +180,9 @@
       "poses": [
         {
           "torso": 272,
+          "spine": 266,
           "head": 268,
-          "hipX": 0,
-          "hipY": 0,
+          "chestAngle": 262,
           "armL": [
             140,
             155
@@ -203,10 +201,10 @@
           ]
         },
         {
-          "torso": 266,
+          "torso": 270,
+          "spine": 262,
           "head": 262,
-          "hipX": 0,
-          "hipY": 0,
+          "chestAngle": 256,
           "armL": [
             150,
             168
@@ -238,9 +236,8 @@
       "poses": [
         {
           "torso": 270,
+          "spine": 270,
           "head": 270,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             270,
             300
@@ -259,10 +256,9 @@
           ]
         },
         {
-          "torso": 272,
+          "torso": 270,
+          "spine": 272,
           "head": 272,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             268,
             295
@@ -293,8 +289,9 @@
       "poses": [
         {
           "torso": 278,
+          "spine": 278,
           "head": 278,
-          "hipX": 0,
+          "pelvis": 14,
           "hipY": -6,
           "armL": [
             182,
@@ -305,18 +302,19 @@
             12
           ],
           "legL": [
-            112,
-            112
+            72,
+            90
           ],
           "legR": [
-            70,
+            112,
             92
           ]
         },
         {
-          "torso": 292,
+          "torso": 280,
+          "spine": 294,
           "head": 296,
-          "hipX": 0,
+          "pelvis": 14,
           "hipY": -12,
           "armL": [
             186,
@@ -327,11 +325,11 @@
             20
           ],
           "legL": [
-            118,
-            118
+            68,
+            90
           ],
           "legR": [
-            66,
+            118,
             90
           ]
         }
@@ -349,9 +347,11 @@
       "poses": [
         {
           "torso": 270,
+          "spine": 274,
           "head": 270,
-          "hipX": 0,
           "hipY": -4,
+          "footL": 180,
+          "footR": 20,
           "armL": [
             96,
             100
@@ -370,10 +370,12 @@
           ]
         },
         {
-          "torso": 272,
+          "torso": 270,
+          "spine": 276,
           "head": 272,
-          "hipX": 0,
           "hipY": -9,
+          "footL": 180,
+          "footR": 24,
           "armL": [
             94,
             98
@@ -404,8 +406,8 @@
       "poses": [
         {
           "torso": 272,
+          "spine": 272,
           "head": 272,
-          "hipX": 0,
           "hipY": -2,
           "armL": [
             98,
@@ -425,9 +427,9 @@
           ]
         },
         {
-          "torso": 274,
+          "torso": 272,
+          "spine": 274,
           "head": 274,
-          "hipX": 0,
           "hipY": -2,
           "armL": [
             96,
@@ -451,18 +453,21 @@
     {
       "id": "calf",
       "name": "Calf press",
-      "cue": "Hands on a wall. Step one foot back, keep that leg straight and press the heel into the floor.",
+      "cue": "Hands on a wall. Step one foot back, keep that leg straight and press the heel down.",
       "tags": [
         "am",
         "pm"
       ],
       "sides": "two",
+      "props": "wall",
       "poses": [
         {
           "torso": 276,
+          "spine": 282,
           "head": 274,
-          "hipX": 0,
           "hipY": -2,
+          "footL": 180,
+          "footR": 350,
           "armL": [
             2,
             4
@@ -481,10 +486,12 @@
           ]
         },
         {
-          "torso": 282,
+          "torso": 278,
+          "spine": 288,
           "head": 280,
-          "hipX": 0,
           "hipY": -3,
+          "footL": 180,
+          "footR": 344,
           "armL": [
             4,
             8
@@ -502,8 +509,7 @@
             122
           ]
         }
-      ],
-      "props": "wall"
+      ]
     },
     {
       "id": "fig-four",
@@ -516,8 +522,8 @@
       "poses": [
         {
           "torso": 284,
+          "spine": 284,
           "head": 284,
-          "hipX": 0,
           "hipY": -8,
           "armL": [
             140,
@@ -537,9 +543,9 @@
           ]
         },
         {
-          "torso": 296,
+          "torso": 286,
+          "spine": 296,
           "head": 296,
-          "hipX": 0,
           "hipY": -14,
           "armL": [
             136,
@@ -570,10 +576,11 @@
       "sides": "one",
       "poses": [
         {
-          "torso": 268,
+          "torso": 270,
+          "spine": 266,
           "head": 268,
-          "hipX": 0,
-          "hipY": 0,
+          "pelvisAngle": 272,
+          "chestAngle": 258,
           "armL": [
             178,
             178
@@ -592,10 +599,11 @@
           ]
         },
         {
-          "torso": 262,
+          "torso": 272,
+          "spine": 260,
           "head": 262,
-          "hipX": 0,
-          "hipY": 0,
+          "pelvisAngle": 266,
+          "chestAngle": 250,
           "armL": [
             150,
             158
@@ -626,9 +634,8 @@
       "poses": [
         {
           "torso": 270,
+          "spine": 268,
           "head": 268,
-          "hipX": 0,
-          "hipY": 0,
           "armL": [
             266,
             270
@@ -648,8 +655,8 @@
         },
         {
           "torso": 268,
+          "spine": 266,
           "head": 264,
-          "hipX": 0,
           "hipY": -5,
           "armL": [
             260,

@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -39,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nous.stretchup.AppViewModel
 import com.nous.stretchup.model.poseAt
+import androidx.compose.ui.platform.LocalContext
 import com.nous.stretchup.session.SessionPlanner
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -123,6 +127,10 @@ fun SessionScreen(vm: AppViewModel) {
 
         Spacer(Modifier.height(10.dp))
 
+        val context = LocalContext.current
+        val available = remember { context.assets.list("ref")?.toSet() ?: emptySet() }
+        val hasReference = "${block.stretch.id}.gif" in available || "${block.stretch.id}.webp" in available
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,13 +138,42 @@ fun SessionScreen(vm: AppViewModel) {
                 .clip(RoundedCornerShape(26.dp))
                 .background(cs.surface)
         ) {
-            StickFigure(
-                pose = pose,
-                bounds = bounds,
-                mirrored = mirrored,
-                showWall = block.stretch.props == "wall",
-                modifier = Modifier.fillMaxSize().padding(12.dp)
-            )
+            Row(Modifier.fillMaxSize()) {
+                StickFigure(
+                    pose = pose,
+                    bounds = bounds,
+                    mirrored = mirrored,
+                    showWall = block.stretch.props == "wall",
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(10.dp)
+                )
+                if (hasReference) {
+                    Column(
+                        modifier = Modifier
+                            .width(126.dp)
+                            .align(Alignment.Top)
+                            .padding(top = 10.dp, end = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        ReferenceLoop(
+                            stretchId = block.stretch.id,
+                            contentDescription = "Reference animation for ${block.stretch.name}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(0.75f)
+                                .clip(RoundedCornerShape(12.dp))
+                        )
+                        Text(
+                            "reference",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = cs.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                }
+            }
 
             if (switching) {
                 Box(

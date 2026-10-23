@@ -13,8 +13,8 @@ android {
         applicationId = "com.nous.stretchup"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     signingConfigs {
@@ -74,4 +74,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
+    // real JSON impl so unit tests can read the asset file (android.jar stubs throw)
+    testImplementation("org.json:json:20240303")
 }

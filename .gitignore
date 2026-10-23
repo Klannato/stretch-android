@@ -2,6 +2,9 @@
 keystore/
 local.properties
 
+# Generated intermediates (reference keyframes, ffmpeg frame sequences)
+tmp/
+
 # Gradle / Android
 build/
 .gradle/

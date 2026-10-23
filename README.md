@@ -43,6 +43,7 @@ works.
 | Reminder content | A notification with the app's name, a title, and two actions: **Start 5 min** and **Snooze 10 min** |
 | Tap the notification | Opens the app straight into the five-minute session for that time of day |
 | Session | 5 blocks × 60s. One stretch per block, animated figure, countdown, pause, skip, back |
+| Reference loop | A short low-framerate illustration of the same stretch plays beside the figure, so the pose is unambiguous |
 | Two-sided stretches | 30 seconds per side, with a "Switch sides" cue in the middle |
 | Rotation | A pointer advances by 5 each session. Morning and evening draw from separate pools |
 | After a session | A recap list and a running session count on the home screen |
@@ -96,6 +97,36 @@ Poses are authored as **angles, not pixel coordinates**: each limb is a directio
 degrees (0 = right, 90 = down, 270 = up), and the renderer walks outward from the hip
 to place each joint. To change or add a stretch, edit `stretches.json` and rebuild —
 no code changes needed.
+
+The skeleton has a bend point in the spine, so fields are:
+
+| field | meaning |
+|---|---|
+| `torso` | hip → lumbar direction |
+| `spine` | lumbar → neck direction (defaults to `torso`). A side bend is `torso` upright with `spine` tilted |
+| `pelvis`, `shoulders` | width of the hip bar and chest bar |
+| `pelvisAngle`, `chestAngle` | bar directions, defaulting to `torso`/`spine`. Differing values are what make a twist visible |
+| `footL`, `footR` | foot direction in degrees |
+| `armL/armR`, `legL/legR` | `[proximal, distal]` directions. `legL` hangs from the hip on screen-right, so each leg must angle *outward* or they cross into an X |
+
+`PoseGeometryTest` reads this file and asserts the invariants (both feet never cross
+at once, hands stay off the floor), which is what caught a pair of swapped legs.
+
+## Reference illustrations
+
+`app/src/main/assets/ref/*.webp` are 12 low-framerate loops (3 keyframes, ping-ponged
+at 3 fps, 156 KB total). They are AI-generated flat illustrations, not photographs or
+third-party artwork — regenerate or delete them freely; the app hides the panel when
+an asset is missing.
+
+To rebuild them from keyframes in `tmp/keyframes/<id>_1..3.png`:
+
+```bash
+python3 tools/build_reference_loops.py     # needs Pillow + ffmpeg
+```
+
+The script crops every loop to the union of its three keyframes (cropping per frame
+makes the loop jitter) and pads to a 3:4 panel.
 
 ## Build
 
