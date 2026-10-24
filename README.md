@@ -4,7 +4,7 @@ A small Android app that nudges you to stretch when you wake up and when you go 
 bed. Sessions are **five minutes** (5 × 60 seconds), all **standing**, and they
 **rotate** through 12 different stretches so tomorrow's set isn't today's.
 
-Each stretch is drawn as an **animated vector stick figure** — no images, no network.
+Each stretch plays **video of a person doing it** — silent, looping, fully offline.
 
 ## Download
 
@@ -42,9 +42,9 @@ works.
 | Wake and bedtime reminders | Two independent daily alarms (default 7:00 am / 10:30 pm), each with its own switch and time picker |
 | Reminder content | A notification with the app's name, a title, and two actions: **Start 5 min** and **Snooze 10 min** |
 | Tap the notification | Opens the app straight into the five-minute session for that time of day |
-| Session | 5 blocks × 60s. One stretch per block, animated figure, countdown, pause, skip, back |
-| Reference loop | A short low-framerate illustration of the same stretch plays beside the figure, so the pose is unambiguous |
-| Your own footage | Import clips of a real person; the session plays them instead of the drawings. Several angles per stretch, tap to switch |
+| Session | 5 blocks × 60s. One stretch per block with its clip, countdown, pause, skip, back |
+| Footage | A clip per stretch, silent and looping. Several angles per stretch, tap the corner label to switch |
+| No clip yet | The card shows the stretch name and cue, so the session still runs before you've filmed everything |
 | Two-sided stretches | 30 seconds per side, with a "Switch sides" cue in the middle |
 | Rotation | A pointer advances by 5 each session. Morning and evening draw from separate pools |
 | After a session | A recap list and a running session count on the home screen |
@@ -84,16 +84,15 @@ If a nudge arrives late or not at all, also check
 ## Project layout
 
 ```
-app/src/main/assets/stretches.json     # all pose data (names, cues, limb angles)
+app/src/main/assets/stretches.json     # session content: names, cues, tags, sides
 app/src/main/java/com/nous/stretchup/
   MainActivity.kt        # activity, permission flow, root composable
   AppViewModel.kt        # settings + session state
   Reminders.kt           # alarm scheduling, notification building
   ReminderReceiver.kt    # fires the notification, re-arms the next day
   BootReceiver.kt        # re-arms after reboot / app update
-  model/Stretch.kt       # pose data classes, JSON loader, angle interpolation
+  model/Stretch.kt       # stretch metadata + JSON loader
   session/SessionPlanner.kt  # 5×60s plan, rotation pointer, block timing
-  ui/StickFigure.kt      # forward kinematics + Compose Canvas renderer
   ui/HomeScreen.kt, ui/SessionScreen.kt, ui/Theme.kt
 ```
 
@@ -131,10 +130,10 @@ The script transcodes whatever the camera produced into H.264/MP4 with no audio 
 `+faststart`, and a 1280 px height cap, so an imported 4K phone clip doesn't balloon
 the APK. Files land in `app/src/main/assets/videos/<stretch-id>[_<angle>].mp4`; drop
 them there by hand if you prefer. Nothing else to configure — the session screen picks
-up a clip automatically and plays it instead of the drawings.
+up a clip automatically.
 
-Stretches with no footage keep the drawn figure and the illustration, so you can film
-them one at a time.
+Stretches with no footage show their name and cue instead of a clip, so the session
+still runs if you film them one at a time.
 
 ### Runtime import (debug builds only)
 
@@ -148,30 +147,10 @@ more than one angle, the label in the corner cycles them on tap.
 
 Notes:
 
-- The app stores only a `content://` reference — your video is **not copied** into the
-  app, so it stays wherever you filed it. Deleting or moving the original breaks the
-  link, and the app falls back to the drawn figure rather than showing a black box.
+- Runtime imports store only a `content://` reference — the video is **not copied** into
+  the app, so it stays wherever you filed it. Deleting or moving the original breaks the
+  link, and the card falls back to the name-and-cue view rather than a black rectangle.
 - Access is persisted across reboots via a persisted URI grant.
-- `docs/guide/*.mp4` are **filming guides**, not footage: a 6-second loop of the
-  pose from the pose data, with the cue and the angles to shoot. They live outside the
-  app on purpose, so they don't inflate the APK. Regenerate with
-  `python3 tools/render_reference_videos.py`.
-
-## Reference illustrations
-
-`app/src/main/assets/ref/*.webp` are 12 low-framerate loops (3 keyframes, ping-ponged
-at 3 fps, 156 KB total). They are AI-generated flat illustrations, not photographs or
-third-party artwork — regenerate or delete them freely; the app hides the panel when
-an asset is missing.
-
-To rebuild them from keyframes in `tmp/keyframes/<id>_1..3.png`:
-
-```bash
-python3 tools/build_reference_loops.py     # needs Pillow + ffmpeg
-```
-
-The script crops every loop to the union of its three keyframes (cropping per frame
-makes the loop jitter) and pads to a 3:4 panel.
 
 ## Build
 

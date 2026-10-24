@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "note": "Angle convention: degrees, screen space, 0=right, 90=down, 180=left, 270=up. torso is hip->lumbar and spine is lumbar->neck, so the waist is a real bend point. pelvisAngle/chestAngle default to torso/spine; giving them different values is how a twist reads.",
+  "version": 3,
+  "note": "Session content only. Motion lives in the imported footage (assets/videos/<id>.mp4), not in pose data.",
   "stretches": [
     {
       "id": "side-bend",
@@ -10,55 +10,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 270,
-          "head": 272,
-          "pelvis": 10,
-          "shoulders": 10,
-          "armL": [
-            277,
-            285
-          ],
-          "armR": [
-            263,
-            255
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 270,
-          "spine": 288,
-          "head": 300,
-          "pelvis": 10,
-          "shoulders": 10,
-          "armL": [
-            297,
-            307
-          ],
-          "armR": [
-            287,
-            276
-          ],
-          "legL": [
-            84,
-            88
-          ],
-          "legR": [
-            96,
-            92
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "neck-side",
@@ -68,51 +20,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 272,
-          "head": 288,
-          "armL": [
-            96,
-            100
-          ],
-          "armR": [
-            255,
-            330
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 270,
-          "spine": 274,
-          "head": 302,
-          "armL": [
-            94,
-            98
-          ],
-          "armR": [
-            250,
-            340
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "shoulder-cross",
@@ -122,51 +30,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 272,
-          "spine": 272,
-          "head": 272,
-          "armL": [
-            15,
-            170
-          ],
-          "armR": [
-            168,
-            195
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 272,
-          "spine": 274,
-          "head": 274,
-          "armL": [
-            8,
-            178
-          ],
-          "armR": [
-            172,
-            200
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "chest-open",
@@ -176,53 +40,7 @@
         "am",
         "pm"
       ],
-      "sides": "one",
-      "poses": [
-        {
-          "torso": 272,
-          "spine": 266,
-          "head": 268,
-          "chestAngle": 262,
-          "armL": [
-            140,
-            155
-          ],
-          "armR": [
-            40,
-            25
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 270,
-          "spine": 262,
-          "head": 262,
-          "chestAngle": 256,
-          "armL": [
-            150,
-            168
-          ],
-          "armR": [
-            30,
-            12
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        }
-      ]
+      "sides": "one"
     },
     {
       "id": "triceps",
@@ -232,51 +50,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 270,
-          "head": 270,
-          "armL": [
-            270,
-            300
-          ],
-          "armR": [
-            282,
-            205
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 270,
-          "spine": 272,
-          "head": 272,
-          "armL": [
-            268,
-            295
-          ],
-          "armR": [
-            285,
-            195
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "side-lunge",
@@ -285,55 +59,7 @@
       "tags": [
         "am"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 278,
-          "spine": 278,
-          "head": 278,
-          "pelvis": 14,
-          "hipY": -6,
-          "armL": [
-            182,
-            190
-          ],
-          "armR": [
-            2,
-            12
-          ],
-          "legL": [
-            72,
-            90
-          ],
-          "legR": [
-            112,
-            92
-          ]
-        },
-        {
-          "torso": 280,
-          "spine": 294,
-          "head": 296,
-          "pelvis": 14,
-          "hipY": -12,
-          "armL": [
-            186,
-            195
-          ],
-          "armR": [
-            8,
-            20
-          ],
-          "legL": [
-            68,
-            90
-          ],
-          "legR": [
-            118,
-            90
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "hip-flexor",
@@ -343,57 +69,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 274,
-          "head": 270,
-          "hipY": -4,
-          "footL": 180,
-          "footR": 20,
-          "armL": [
-            96,
-            100
-          ],
-          "armR": [
-            84,
-            80
-          ],
-          "legL": [
-            80,
-            88
-          ],
-          "legR": [
-            118,
-            100
-          ]
-        },
-        {
-          "torso": 270,
-          "spine": 276,
-          "head": 272,
-          "hipY": -9,
-          "footL": 180,
-          "footR": 24,
-          "armL": [
-            94,
-            98
-          ],
-          "armR": [
-            86,
-            82
-          ],
-          "legL": [
-            76,
-            90
-          ],
-          "legR": [
-            126,
-            104
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "quad",
@@ -402,53 +78,7 @@
       "tags": [
         "am"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 272,
-          "spine": 272,
-          "head": 272,
-          "hipY": -2,
-          "armL": [
-            98,
-            104
-          ],
-          "armR": [
-            99,
-            108
-          ],
-          "legL": [
-            90,
-            90
-          ],
-          "legR": [
-            73,
-            250
-          ]
-        },
-        {
-          "torso": 272,
-          "spine": 274,
-          "head": 274,
-          "hipY": -2,
-          "armL": [
-            96,
-            102
-          ],
-          "armR": [
-            98,
-            110
-          ],
-          "legL": [
-            90,
-            90
-          ],
-          "legR": [
-            70,
-            242
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "calf",
@@ -458,58 +88,7 @@
         "am",
         "pm"
       ],
-      "sides": "two",
-      "props": "wall",
-      "poses": [
-        {
-          "torso": 276,
-          "spine": 282,
-          "head": 274,
-          "hipY": -2,
-          "footL": 180,
-          "footR": 350,
-          "armL": [
-            2,
-            4
-          ],
-          "armR": [
-            358,
-            0
-          ],
-          "legL": [
-            84,
-            88
-          ],
-          "legR": [
-            110,
-            112
-          ]
-        },
-        {
-          "torso": 278,
-          "spine": 288,
-          "head": 280,
-          "hipY": -3,
-          "footL": 180,
-          "footR": 344,
-          "armL": [
-            4,
-            8
-          ],
-          "armR": [
-            356,
-            0
-          ],
-          "legL": [
-            82,
-            86
-          ],
-          "legR": [
-            118,
-            122
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "fig-four",
@@ -518,53 +97,7 @@
       "tags": [
         "pm"
       ],
-      "sides": "two",
-      "poses": [
-        {
-          "torso": 284,
-          "spine": 284,
-          "head": 284,
-          "hipY": -8,
-          "armL": [
-            140,
-            120
-          ],
-          "armR": [
-            55,
-            80
-          ],
-          "legL": [
-            88,
-            90
-          ],
-          "legR": [
-            20,
-            130
-          ]
-        },
-        {
-          "torso": 286,
-          "spine": 296,
-          "head": 296,
-          "hipY": -14,
-          "armL": [
-            136,
-            118
-          ],
-          "armR": [
-            50,
-            84
-          ],
-          "legL": [
-            88,
-            90
-          ],
-          "legR": [
-            16,
-            136
-          ]
-        }
-      ]
+      "sides": "two"
     },
     {
       "id": "twist",
@@ -573,55 +106,7 @@
       "tags": [
         "am"
       ],
-      "sides": "one",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 266,
-          "head": 268,
-          "pelvisAngle": 272,
-          "chestAngle": 258,
-          "armL": [
-            178,
-            178
-          ],
-          "armR": [
-            2,
-            2
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 272,
-          "spine": 260,
-          "head": 262,
-          "pelvisAngle": 266,
-          "chestAngle": 250,
-          "armL": [
-            150,
-            158
-          ],
-          "armR": [
-            30,
-            22
-          ],
-          "legL": [
-            86,
-            90
-          ],
-          "legR": [
-            94,
-            90
-          ]
-        }
-      ]
+      "sides": "one"
     },
     {
       "id": "sunrise",
@@ -630,52 +115,7 @@
       "tags": [
         "am"
       ],
-      "sides": "one",
-      "poses": [
-        {
-          "torso": 270,
-          "spine": 268,
-          "head": 268,
-          "armL": [
-            266,
-            270
-          ],
-          "armR": [
-            274,
-            278
-          ],
-          "legL": [
-            88,
-            92
-          ],
-          "legR": [
-            92,
-            88
-          ]
-        },
-        {
-          "torso": 268,
-          "spine": 266,
-          "head": 264,
-          "hipY": -5,
-          "armL": [
-            260,
-            264
-          ],
-          "armR": [
-            280,
-            284
-          ],
-          "legL": [
-            92,
-            88
-          ],
-          "legR": [
-            88,
-            92
-          ]
-        }
-      ]
+      "sides": "one"
     }
   ]
 }

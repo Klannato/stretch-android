@@ -74,8 +74,8 @@ Also checked:
   repository (`keystore/`, gitignored); a fresh clone cannot build a signed release.
 - **No WebView, no JavaScript, no HTML rendering.** The UI is native Compose.
 - **No logging of personal data.** The app writes nothing to logcat in release builds.
-- **All artwork is local.** `assets/stretches.json` is pose data; `assets/ref/*.webp`
-  are AI-generated illustrations. Nothing is fetched or attributed to a third party.
+- **All media is local.** `assets/videos/` holds the stretch clips, bundled in the APK.
+  Nothing is fetched at runtime and nothing is attributed to a third party.
 - **Backup and transfer disabled**, as above.
 
 ## What the app cannot do

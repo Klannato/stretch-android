@@ -66,7 +66,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         private set
 
     init {
-        library = StretchLibrary.load(app).map { StretchLibrary.sanitizePoses(it) }
+        library = StretchLibrary.load(app)
     }
 
     // ---- settings ----

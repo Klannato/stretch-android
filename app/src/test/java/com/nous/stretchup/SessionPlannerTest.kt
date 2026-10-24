@@ -1,9 +1,6 @@
 package com.nous.stretchup
 
-import com.nous.stretchup.model.Limb
-import com.nous.stretchup.model.Pose
 import com.nous.stretchup.model.Stretch
-import com.nous.stretchup.model.lerpPose
 import com.nous.stretchup.session.SessionPlanner
 import com.nous.stretchup.session.Slot
 import org.junit.Assert.assertEquals
@@ -18,16 +15,7 @@ class SessionPlannerTest {
         name = id,
         cue = "",
         tags = tags,
-        twoSided = twoSided,
-        props = null,
-        poses = listOf(
-            Pose(torso = 270f, spine = 270f, head = 270f, hipX = 0f, hipY = 0f,
-                armL = Limb(90f, 90f), armR = Limb(90f, 90f),
-                legL = Limb(90f, 90f), legR = Limb(90f, 90f)),
-            Pose(torso = 280f, spine = 280f, head = 280f, hipX = 0f, hipY = 0f,
-                armL = Limb(80f, 80f), armR = Limb(80f, 80f),
-                legL = Limb(90f, 90f), legR = Limb(90f, 90f))
-        )
+        twoSided = twoSided
     )
 
     private val library = listOf(
@@ -83,7 +71,6 @@ class SessionPlannerTest {
             }
             cursor = next
         }
-        // Over enough sessions the whole morning pool gets used.
         assertEquals(setOf("a1", "a2", "a3", "a4", "a5", "a6", "both"), seen)
     }
 
@@ -99,7 +86,6 @@ class SessionPlannerTest {
     fun `any cursor value is safe including negative`() {
         val (blocks, next) = SessionPlanner.plan(library, -7, Slot.WAKE)
         assertEquals(5, blocks.size)
-        // next is a cursor into the pool (7 morning stretches here), not a block index
         assertTrue("cursor $next out of range", next in 0 until SessionPlanner.pool(library, Slot.WAKE).size)
     }
 
@@ -122,17 +108,5 @@ class SessionPlannerTest {
         assertTrue(!SessionPlanner.switchingSide(twoSided, 45f))
         assertTrue(!SessionPlanner.mirrorActive(twoSided, 29f))
         assertTrue(SessionPlanner.mirrorActive(twoSided, 31f))
-    }
-
-    @Test
-    fun `pose interpolation travels the short way round the circle`() {
-        val a = Pose(torso = 350f, spine = 350f, head = 0f, hipX = 0f, hipY = 0f,
-            armL = Limb(10f, 0f), armR = Limb(0f, 0f), legL = Limb(0f, 0f), legR = Limb(0f, 0f))
-        val b = Pose(torso = 10f, spine = 10f, head = 0f, hipX = 0f, hipY = 0f,
-            armL = Limb(350f, 0f), armR = Limb(0f, 0f), legL = Limb(0f, 0f), legR = Limb(0f, 0f))
-        val mid = lerpPose(a, b, 0.5f)
-        // 360 and 0 are the same direction; compare modulo a full turn
-        assertEquals(0f, mid.torso % 360f, 0.01f)
-        assertEquals(0f, mid.armL.a, 0.01f)
     }
 }

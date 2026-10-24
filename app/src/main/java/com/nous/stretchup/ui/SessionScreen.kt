@@ -1,32 +1,22 @@
 package com.nous.stretchup.ui
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -45,22 +35,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nous.stretchup.AppViewModel
 import com.nous.stretchup.data.Footage
-import com.nous.stretchup.model.Stretch
-import com.nous.stretchup.model.poseAt
-import com.nous.stretchup.session.Block
 import com.nous.stretchup.session.SessionPlanner
 import kotlin.math.ceil
 
 /**
- * The session screen: one stretch per 60-second block, with the figure, the cue, the
- * countdown and the reference loop.
+ * The session screen: one stretch per 60-second block, showing its footage, the cue and
+ * the countdown.
  *
- * The clock is driven here rather than in the ViewModel because it has to stop when
- * the screen leaves composition; the ViewModel only owns the elapsed value.
+ * The card plays the stretch's clip. A stretch with no footage shows its name and cue
+ * with a note on how to add one — there is no drawn stand-in.
  *
- * What plays in the card depends on what exists for the stretch, in this order:
- * imported footage (the user's own recording), then the drawn figure with the
- * generated illustration beside it.
+ * The clock is driven here rather than in the ViewModel because it has to stop when the
+ * screen leaves composition; the ViewModel only owns the elapsed value.
  */
 @Composable
 fun SessionScreen(vm: AppViewModel) {
@@ -88,40 +74,17 @@ fun SessionScreen(vm: AppViewModel) {
         return
     }
 
-    // The breathing animation is a 7-second cosine cycle, so the pose eases in and out
-    // instead of snapping between keyframes. Frozen while paused so the figure holds.
-    val cycle = if (vm.running) {
-        val transition = rememberInfiniteTransition(label = "breath")
-        val value by transition.animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(7000, easing = LinearEasing),
-                repeatMode = RepeatMode.Restart
-            ),
-            label = "breathValue"
-        )
-        value
-    } else {
-        0.2f
-    }
-
-    val pose = block.stretch.poseAt(cycle)
-    val bounds = remember(block.stretch.id) { figureBounds(block.stretch) }
-    // Two-sided stretches play the same pose flipped for the second half, which is what
-    // makes "30 seconds a side" work without a second set of drawings.
-    val mirrored = SessionPlanner.mirrorActive(block, into)
-    val switching = SessionPlanner.switchingSide(block, into)
-    val blockRemaining = ceil(SessionPlanner.BLOCK_SECONDS - into).toInt().coerceIn(0, SessionPlanner.BLOCK_SECONDS)
-    val totalRemaining = ceil(SessionPlanner.TOTAL_SECONDS - vm.elapsed).toInt().coerceAtLeast(0)
-
-    // Imported footage wins over the drawings. Re-read per block, and re-read again if
-    // the import screen changed something mid-session.
     val videos = remember(block.stretch.id, vm.videosVersion) {
         Footage.forStretch(context, block.stretch.id)
     }
     var videoBroken by remember(block.stretch.id) { mutableStateOf(false) }
     val showVideo = videos.isNotEmpty() && !videoBroken
+
+    // Two-sided stretches still need the halfway cue even when the clip covers both sides.
+    val switching = SessionPlanner.switchingSide(block, into)
+    val mirrored = SessionPlanner.mirrorActive(block, into)
+    val blockRemaining = ceil(SessionPlanner.BLOCK_SECONDS - into).toInt().coerceIn(0, SessionPlanner.BLOCK_SECONDS)
+    val totalRemaining = ceil(SessionPlanner.TOTAL_SECONDS - vm.elapsed).toInt().coerceAtLeast(0)
 
     Column(
         modifier = Modifier
@@ -169,39 +132,38 @@ fun SessionScreen(vm: AppViewModel) {
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
-                FigurePanel(
-                    block = block,
-                    pose = pose,
-                    bounds = bounds,
-                    mirrored = mirrored
+                NoFootageCard(
+                    title = block.stretch.name,
+                    cue = block.stretch.cue,
+                    broken = videos.isNotEmpty()
                 )
+            }
 
-                if (switching) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(cs.primary)
-                            .padding(horizontal = 18.dp, vertical = 10.dp)
-                    ) {
-                        Text(
-                            "Switch sides",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = cs.onPrimary
-                        )
-                    }
-                }
-
-                if (block.twoSided) {
+            if (switching) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(cs.primary)
+                        .padding(horizontal = 18.dp, vertical = 10.dp)
+                ) {
                     Text(
-                        if (mirrored) "Second side" else "First side",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = cs.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(14.dp)
+                        "Switch sides",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = cs.onPrimary
                     )
                 }
+            }
+
+            if (block.twoSided && !showVideo) {
+                Text(
+                    if (mirrored) "Second side" else "First side",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = cs.onSurfaceVariant,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(14.dp)
+                )
             }
         }
 
@@ -282,56 +244,40 @@ fun SessionScreen(vm: AppViewModel) {
 }
 
 /**
- * The drawn fallback: the animated figure with the generated illustration pinned to the
- * top-right corner. Used whenever a stretch has no imported footage.
+ * Shown for a stretch with no clip yet, or whose clip no longer resolves. States the
+ * stretch and how to fix the gap rather than faking a demonstration.
  */
 @Composable
-private fun FigurePanel(
-    block: Block,
-    pose: com.nous.stretchup.model.Pose,
-    bounds: FigureBounds,
-    mirrored: Boolean
-) {
+private fun NoFootageCard(title: String, cue: String, broken: Boolean) {
     val cs = MaterialTheme.colorScheme
-    val context = LocalContext.current
-    val available = remember { context.assets.list("ref")?.toSet() ?: emptySet() }
-    val hasReference = "${block.stretch.id}.webp" in available || "${block.stretch.id}.gif" in available
-
-    Row(Modifier.fillMaxSize()) {
-        StickFigure(
-            pose = pose,
-            bounds = bounds,
-            mirrored = mirrored,
-            showWall = block.stretch.props == "wall",
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(10.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.headlineMedium,
+            color = cs.onBackground,
+            textAlign = TextAlign.Center
         )
-        if (hasReference) {
-            Column(
-                modifier = Modifier
-                    .width(126.dp)
-                    .align(Alignment.Top)
-                    .padding(top = 10.dp, end = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ReferenceLoop(
-                    stretchId = block.stretch.id,
-                    contentDescription = "Reference animation for ${block.stretch.name}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(0.75f)
-                        .clip(RoundedCornerShape(12.dp))
-                )
-                Text(
-                    "reference",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = cs.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 2.dp)
-                )
-            }
-        }
+        Spacer(Modifier.height(10.dp))
+        Text(
+            cue,
+            style = MaterialTheme.typography.bodyLarge,
+            color = cs.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(18.dp))
+        Text(
+            if (broken) "This clip can't be played. Re-add it with tools/add_footage.sh."
+            else "No video for this stretch yet. Add one with tools/add_footage.sh.",
+            style = MaterialTheme.typography.labelSmall,
+            color = cs.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
