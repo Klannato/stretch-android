@@ -44,7 +44,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nous.stretchup.AppViewModel
-import com.nous.stretchup.data.VideoLibrary
+import com.nous.stretchup.data.Footage
 import com.nous.stretchup.model.Stretch
 import com.nous.stretchup.model.poseAt
 import com.nous.stretchup.session.Block
@@ -117,9 +117,8 @@ fun SessionScreen(vm: AppViewModel) {
 
     // Imported footage wins over the drawings. Re-read per block, and re-read again if
     // the import screen changed something mid-session.
-    val videoLibrary = remember { VideoLibrary(context) }
     val videos = remember(block.stretch.id, vm.videosVersion) {
-        videoLibrary.videosFor(block.stretch.id)
+        Footage.forStretch(context, block.stretch.id)
     }
     var videoBroken by remember(block.stretch.id) { mutableStateOf(false) }
     val showVideo = videos.isNotEmpty() && !videoBroken

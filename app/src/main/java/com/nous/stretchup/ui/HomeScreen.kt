@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nous.stretchup.AppViewModel
+import com.nous.stretchup.BuildConfig
 import com.nous.stretchup.session.SessionPlanner
 import com.nous.stretchup.session.Slot
 import java.util.Calendar
@@ -229,9 +230,12 @@ fun HomeScreen(
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        VideoImportCard(vm = vm, onChanged = { vm.videosChanged() })
+        // Importing at runtime is a development aid, not an end-user feature: finished
+        // footage ships inside the app (tools/add_footage.sh), so release builds hide it.
+        if (BuildConfig.DEBUG) {
+            Spacer(Modifier.height(16.dp))
+            VideoImportCard(vm = vm, onChanged = { vm.videosChanged() })
+        }
 
         if (!notificationsEnabled) {
             Spacer(Modifier.height(14.dp))

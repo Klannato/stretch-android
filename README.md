@@ -116,20 +116,35 @@ The skeleton has a bend point in the spine, so fields are:
 `PoseGeometryTest` reads this file and asserts the invariants (both feet never cross
 at once, hands stay off the floor), which is what caught a pair of swapped legs.
 
-## Recording your own footage
+## Adding footage
 
-The app can play real footage instead of the drawings. In **Your own footage** on the
-home screen, tap **Import videos** and pick clips. How they are matched:
+Footage is added **at build time**, so the shipped app needs no permissions, no file
+picker and no storage access — a clip is just an asset:
 
-| filename | goes to |
-|---|---|
-| `side-bend.mp4` | that stretch, automatically |
-| `side-bend_2.mp4`, `side-bend-angle1.mov` | same stretch, as a second angle |
-| `VID_20261023.mp4` | a queue on the home screen where you choose the stretch by hand |
+```bash
+tools/add_footage.sh quad ~/Videos/quad-front.mov 1     # front angle
+tools/add_footage.sh quad ~/Videos/quad-side.mov 2      # second angle
+gradle :app:assembleRelease
+```
 
-Once a stretch has footage, the session card plays it (silent, looping, cropped to
-fill) instead of the figure and the illustration. With more than one angle the label
-in the corner cycles them on tap. Remove a clip with **Remove** next to its stretch.
+The script transcodes whatever the camera produced into H.264/MP4 with no audio track,
+`+faststart`, and a 1280 px height cap, so an imported 4K phone clip doesn't balloon
+the APK. Files land in `app/src/main/assets/videos/<stretch-id>[_<angle>].mp4`; drop
+them there by hand if you prefer. Nothing else to configure — the session screen picks
+up a clip automatically and plays it instead of the drawings.
+
+Stretches with no footage keep the drawn figure and the illustration, so you can film
+them one at a time.
+
+### Runtime import (debug builds only)
+
+Debug builds also carry an **Your own footage** card for trying a clip without
+rebuilding. Files named after a stretch (`side-bend.mp4`, `side-bend_2.mp4`) are matched
+automatically; anything else can be assigned by hand. Release builds omit this card
+entirely — it is a development aid, not an end-user feature.
+
+Whatever the source, footage plays silent and looping, cropped to fill the card. With
+more than one angle, the label in the corner cycles them on tap.
 
 Notes:
 

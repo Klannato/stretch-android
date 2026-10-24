@@ -92,8 +92,13 @@ settings page).
 
 ## Imported video
 
-If you import your own footage, the app stores a `content://` URI for each clip in the
-same private preferences file, plus a persisted read grant from Android's document
+**Release builds read no video from your device at all.** Footage for the published app
+is bundled inside the APK as an asset; there is no file picker, no storage permission,
+and no `content://` access.
+
+The runtime importer described below exists only in **debug builds**, for trying a clip
+without rebuilding. If you use it, the app stores a `content://` URI for each clip in
+the same private preferences file, plus a persisted read grant from Android's document
 picker. That means:
 
 - the app can read **only the files you picked**, and only for as long as you leave the
