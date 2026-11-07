@@ -45,7 +45,14 @@ Also inspect the v1.1 poses data embedded in stretches.json at that commit
   "name + cue + how to add footage" — replace/augment with the drawn pose.
 - Keep PoseGeometryTest-style invariants (e.g. side-lunge legs not crossing).
 
-## Constraints
+## Reference for validating poses
+Claude must check work against **real human reference**, not just geometry:
+- `docs/reference-videos.md` lists one primary + one alternative YouTube video per stretch.
+- For each pose, open the reference video, confirm the limb arrangement, joint angles,
+  and which side is loaded match a real person performing the stretch.
+- If a pose looks wrong vs. the video, fix the pose data — do not weaken invariants.
+- Optional: extract a keyframe (`yt-dlp` + ffmpeg) into `tmp/` for side-by-side
+  comparison; `tmp/` is gitignored.
 - No INTERNET permission (app must stay offline).
 - Don't break session/rotation/reminder logic.
 - Keep existing tests green; add PoseGeometryTest back.
